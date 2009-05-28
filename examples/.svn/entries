@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="21"
+   name=""
+   committed-date="2006-01-06T09:01:55.417792Z"
+   url="svn+ssh://wiseman@heavymeta.org/usr/local/svn-repos/claim/trunk/claim/examples"
+   last-author="wiseman"
+   kind="dir"
+   uuid="db11ab2a-e9f8-0310-b570-fe5df38d4f13"
+   revision="24"/>
+<entry
+   committed-rev="21"
+   name="gossip-bot.lisp"
+   text-time="2006-01-05T08:41:25.000000Z"
+   committed-date="2006-01-06T09:01:55.417792Z"
+   checksum="3e752d1900344d169298f12147c78962"
+   last-author="wiseman"
+   kind="file"
+   prop-time="2005-06-07T00:55:05.000000Z"/>
+</wc-entries>

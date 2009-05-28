@@ -1,0 +1,215 @@
+TOC2.0 documentation and misc TOC notes
+Jeffrey Rosen - jeff@emuscene.com
+Updated by George Vulov - georgevulov@hotmail.com
+
+
+First of all, lets start with some old TOC1.0 stuff:
+
+toc_get_status <screenname>
+
+This useful command wasn't ever really documented.  It returns either an UPDATE_BUDDY message or an ERROR
+message depending on whether or not the guy appears to be online.
+
+
+
+Misc TOC notes:
+
+If you connect with an empty buddy list, other people can't see you online.  You can work around this by 
+simply sending "toc_add_buddy a" if the user's buddy list is empty.  This has been corrected in TOC2.0.
+
+In TOC1.0 there is a toc_add_deny command, but no toc_remove_deny.  In order to remove people from your 
+block list, you need to send a "toc_add_permit" command and then send your entire deny list without the 
+screenname you want to unblock.  Reverse the deny and permit commands if you want to add someone to your 
+permit list.  Again, TOC2.0 fixes this.
+
+
+Now for TOC2.0:
+
+
+**************** CLIENT -> SERVER: ****************
+
+
+---------------------------------------------
+Connecting:
+Connect to aimexpress.oscar.aol.com, not toc.oscar.aol.com, otherwise retrieving profiles
+will not work without much refreshing.
+
+---------------------------------------------
+The sign on process is essentially the same as in TOC1.0 except AOL added some questionable parameters to it:
+
+toc2_login <address> <port> <screenname> <roasted pw> <language> <version*> 160 US "" "" 3 0 30303 -kentucky -utf8 76144224***
+
+* The version string MUST start with "TIC:" otherwise, no dice.  For example, "TIC:AIMM" is ok, but "AIMM2" would be rejected.
+
+** I have no idea what the parameters after the version are. Put them in verbatim and logging in works.
+
+*** This is a simple code created with the first letter of the screen name and password.  Here is some generic code:
+    sn = ascii value of the first letter of the screen name
+    pw = ascii value of the first character of the password
+    return 7696 * sn * pw
+    For example, if the screenname was "test" and the password was "x5435" the result would be 107128320.
+
+---------------------------------------------
+The permit/deny stuff has been seriously revamped.  There's not much else you could ask for:
+
+toc2_set_pdmode <value>
+
+ Value:
+ 1 - Allow all (default)
+ 2 - Block all
+ 3 - Allow "permit group" only
+ 4 - Block "deny group" only
+ 5 - Allow buddy list only
+
+Pretty self explanatory.  You can manage your permit/deny groups using the commands below:
+
+toc2_add_permit <screenname>
+toc2_remove_permit <screenname> 
+
+toc2_add_deny <screenname>
+toc2_remove_deny <screenname>
+
+<screenname> should be normalized and you can add multiple people at a time by separating the 
+screennames with a space.  Unlike in TOC1.0, these don't cause funky behaviors.  That is, you 
+can access these whenever you feel like and thanks  to the new pdmode function, you no longer 
+will have to resort to cheap hacks to get these to work correctly.  
+(Read: no  more wildly flickering on other people's buddy lists!)
+
+Note: In TOC2.0 these are all automatically added to your config.  More on that later.
+
+---------------------------------------------
+Buddy list commands have also been seriously revamped:
+
+toc2_new_group <group>
+toc2_del_group <group>
+
+This is an entirely new command that allows you to add groups.  These should be quoted and you can't 
+add more than one per command. This can be worked around using the new_buddies command though.
+
+---------------------------------------------
+toc2_new_buddies <config format*>
+
+In TOC2.0, you must add buddies in "config format".  See example:
+
+{g:test<lf*>b:buddytest:alias1<lf>b:buddytest2:alias2<lf>}
+
+If you sent that with the toc2_new_buddies command, you would add the two buddies (buddytest and buddytest2)
+with aliases alias1 and alias2 into the group "test". Note that if the group doesn't already exist, it will be created.
+
+Alternatively, if the usernames didn't have aliases, they would be added as follows:
+{g:test<lf*>b:buddytest<lf>b:buddytest2<lf>}
+
+* <lf> stands for linefeed, '\n'.  Don't literally send "<LF>" :)
+
+---------------------------------------------
+toc2_remove_buddy <screenname> <group>
+
+Pretty self explanatory.  You can remove multiple names in the same group using the syntax <screenname> <screenname> <group>.  
+
+---------------------------------------------
+toc2_send_im <user> <message> <auto>
+
+This seems to be the same as in TOC1.0.
+
+---------------------------------------------
+toc2_client_event <user> <typing status>
+
+This is used to send a typing notification.
+0 for no activity, 1 for typing paused, 2 for currently typing.
+
+
+
+**************** SERVER -> CLIENT: ****************
+
+
+---------------------------------------------
+CONFIG2:<config>
+
+The only difference between CONFIG2 and CONFIG is that instead of "b buddy1", for example, it would be "b:buddy1".  
+Also, the last item is always "done:<lf>".
+
+TOC2 has also added support for server-stored aliases. A user's server-stored alias, if they have one, is right
+after the username, separated by a colon.
+
+A word about configs:  in TOC2.0, everything is automatically saved to your config and your config is automatically
+loaded when you sign on.  That is, you don't have to read the config and manually add all the buddies.  If they show 
+up in the config, they've already been added.
+
+---------------------------------------------
+NEW_BUDDY_REPLY2:<buddy>:<action>
+
+This shows up after you add a buddy. The action can be either "added", which means that the buddy
+was added correctly, or "auth" which is used in ICQ to siginify that that user has requested
+authorization to you to their buddy list.
+
+---------------------------------------------
+IM_IN_ENC2:<user>:<auto>:<???>:<???>:<buddy status>:<???>:<???>:en:<message>
+
+This command received instead of IM_IN. It is similar to TOC 1.0 except there are a few new parameters.
+One of them is language and another is the buddy status, but the rest are unknown.
+
+---------------------------------------------
+CHAT_IN_ENC:<chatroom id>:<user>:<whisper T/F>:<???>:en:<message>
+
+This command received instead of CHAT_IN. It is similar to TOC 1.0 except there are a two new parameters.
+One of them is language; the other is unknown but is usually "A"
+
+---------------------------------------------
+UPDATE_BUDDY2:<screenname>:<online>:<warning>:<signon Time>:<idletime>:<userclass>:<???>
+
+Same as TOC1.0 except there's a mystery parameter.
+
+---------------------------------------------
+UPDATED2:b:<username>:<unknown>:<alias>
+We receive this when somebody's server-stored alias is updated.
+
+---------------------------------------------
+INSERTED2:g:<group name>
+A new group has been added to the buddy list.
+
+INSERTED2:b:<alias>:<username>:<group>
+A new screenname has been added.
+ 
+INSERTED2:d:<username>
+Somebody has been added to the deny list.
+
+INSERTED2:p:<username>
+Somebody has been added to the permit list.
+
+These will be sent whenever the buddy list is modified from a different location, which happens
+when one is logged in in two different places. It's a good idea to handle these, otherwise
+the buddy list displayed could become out of synch with what's on the server.
+
+---------------------------------------------
+DELETED2:g:<group name>
+A group has been deleted from the buddy list.
+
+DELETED2:b:<username>:<group>
+A user has been deleted from the buddy list.
+
+DELETED2:d:<username>
+A user had been removed from the deny list.
+
+DELETED2:p:<username>
+A user has been removed from the permit list.
+
+These commands are similar to the INSERTED2 commands, in that they provide dynamic
+updates whenever the buddy list is modified from a different location.
+
+---------------------------------------------
+CLIENT_EVENT2:<username>:<typing status>
+
+These are typing notifications. 0 means stopped, 1 means text entered, and 2 means typing.
+
+---------------------------------------------
+BUDDY_CAPS2:<username>:<capability1>,<capability2>,...
+
+This packet describes a particular user's capabilities, such
+as file transfer, buddy icons, ect.
+
+---------------------------------------------
+BART2:<username>:<unknown>
+
+The structure of this message is not yet understood. It most likely provides buddy icon
+information about a user, such as whether they have a buddy icon or not and
+the hashcode necessary to request if from the server.
