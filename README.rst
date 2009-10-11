@@ -2,6 +2,7 @@ CLAIM - Common Lisp AIM Interface
 =================================
 
 Copyright 2001, 2009 John Wiseman
+
 Version 1.1
 
 Licensed under the MIT license--see the accompanying LICENSE.txt
@@ -22,7 +23,7 @@ Load this code (with ASDF, ``(asdf:operate 'asdf:load-op :claim)``
 should be sufficient once you've put the directory containing the
 claim.asd file in ``asdf:*central-registry*``), then load the
 ``examples/gossip-bot.lisp`` file.  At the listener, run the
-start-gossip-bot function:
+start-gossip-bot function::
 
   ? (start-gossip-bot "myusername" "mypassword")
 
