@@ -5,7 +5,7 @@ Copyright 2001, 2009 John Wiseman
 
 Version 1.1
 
-Licensed under the MIT license--see the accompanying LICENSE.txt
+Licensed under the MIT license--see the accompanying ``LICENSE.txt``
 file.
 
 
@@ -35,10 +35,10 @@ Anyone can now send messages to and interact with the gossip bot.
 REQUIREMENTS & DEPENDENCIES
 ---------------------------
 
-CLAIM requires minimal TCP socket support.  The file sysdeps.lisp
-contains a single function definition, ``MAKE-TCP-SOCKET``, that opens a
-TCP socket.  Implementations are provided for OpenMCL, ACL, LispWorks
-and SBCL.
+CLAIM requires minimal TCP socket support.  The file ``sysdeps.lisp``
+contains a single function definition, ``MAKE-TCP-SOCKET``, that opens
+a TCP socket.  Implementations are provided for OpenMCL, ACL,
+LispWorks and SBCL.
 
 IMPLEMENTATION NOTES
 --------------------
@@ -54,7 +54,7 @@ implementations.  Let me know if it doesn't work out that way.
 
 I checked all the other AIM libraries I could find, and nobody even
 tries to deal with the "server speed limit", which was a constant
-problem for me.  See the comments at the end of this file for one
+problem for me.  See the comments at the end of ``claim.lisp`` for one
 attempt to solve this problem.
 
 The following implementations of TOC were helpful when writing this
