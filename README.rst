@@ -18,16 +18,16 @@ other AIM clients.
 QUICKSTART
 ----------
 
-Load this code (with ASDF, "(asdf:operate 'asdf:load-op :claim)"
+Load this code (with ASDF, ``(asdf:operate 'asdf:load-op :claim)``
 should be sufficient once you've put the directory containing the
-claim.asd file in asdf:*central-registry*), then load the
-examples/gossip-bot.lisp file.  At the listener, run the
+claim.asd file in ``asdf:*central-registry*``), then load the
+``examples/gossip-bot.lisp`` file.  At the listener, run the
 start-gossip-bot function:
 
   ? (start-gossip-bot "myusername" "mypassword")
 
 You must use the username and password of an existing AIM account (see
-<http://aim.aol.com/> on how to create a free AIM account).
+http://aim.aol.com/ on how to create a free AIM account).
 
 Anyone can now send messages to and interact with the gossip bot.
 
@@ -35,7 +35,7 @@ REQUIREMENTS & DEPENDENCIES
 ---------------------------
 
 CLAIM requires minimal TCP socket support.  The file sysdeps.lisp
-contains a single function definition, MAKE-TCP-SOCKET, that opens a
+contains a single function definition, ``MAKE-TCP-SOCKET``, that opens a
 TCP socket.  Implementations are provided for OpenMCL, ACL, LispWorks
 and SBCL.
 
@@ -59,8 +59,8 @@ attempt to solve this problem.
 The following implementations of TOC were helpful when writing this
 one:
 
-  http://sourceforge.net/projects/tnt/
-  http://www.wiredfool.com/ftoc/ (Eric Soroos)
+* http://sourceforge.net/projects/tnt/
+* http://www.wiredfool.com/ftoc/ (Eric Soroos)
 
 This code has been tested in ACL, OpenMCL, SBCL and LispWorks.
 
